@@ -1,0 +1,9 @@
+.grid-info {
+    display: grid;
+    outline: 1px solid red;
+    grid-auto-flow: row;
+}
+
+body {
+    background-color: red;
+}

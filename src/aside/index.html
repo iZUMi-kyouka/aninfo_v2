@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr minmax(30em, 6fr) minmax(15em, 2fr) 1fr;
+    grid-template-rows: 2em 50vh auto 4em;
+    grid-template-areas: 
+    "header header header header"
+    "hero hero hero hero"
+    ". main aside ."
+    "footer footer footer footer";
+    column-gap: 1em;
+}
+
+@media (max-width: 750px) {
+
+    body {
+    display: grid;
+    grid-template-columns: 1fr minmax(25em, 6fr)  1fr;
+    grid-template-rows: 2em 50vh auto auto 4em;
+    grid-template-areas: 
+    "header header header"
+    "hero hero hero"
+    ". main . "
+    ". aside ."
+    "footer footer footer";
+    column-gap: 1em;
+}
+}
+
+nav > ul > li {
+    list-style: none;
+    padding-left: 0;
+}
+
+nav > ul {
+    display: flex;
+    gap: 10px;
+}
+
+footer {
+    grid-area: footer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+header {
+    grid-area: header;
+    display: flex;
+    position: sticky;
+    top: 0;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+aside {
+    grid-area: aside;
+    background-color: whitesmoke;
+    padding: 1em;
+}
+
+main {
+    grid-area: main;
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 1em;
+    padding: 1em 0;
+}
+
+header, footer {
+    background-color: yellow;
+}
+
+.hero {
+    display: flex;
+    grid-area: hero;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: purple;
+    color: white;
+}
+
+.article-card {
+    text-align: justify;
+    display: grid;
+    grid-template: 
+    "img title" min-content
+    "img desc" auto
+    / 1fr 4fr;
+    box-shadow: 0 0 0.4em rgba(0, 0, 0, 0.5);
+    column-gap: 1em;
+    padding: 1em;
+}
+
+.ac-img {
+    grid-area: img;
+    max-width: 10vw;
+}
+
+.ac-title {
+    grid-area: title;
+}
+
+.ac-desc {
+    grid-area: desc;
+}
+
+
+</style>
+<html>
+    <head>
+    </head>
+
+    <body>
+
+        <header>
+            <nav>
+                <ul>
+                    <li>Home</li>
+                    <li>Travel</li>
+                    <li>Food</li>
+                    <li>Games</li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="hero">
+            <h1>iZUMi's Hidden Sanctuary</h1>
+            <h4>The place where souls rest (momentarily)</h4>
+        </div>
+
+        <main>
+            
+            <h2>Blog Posts</h2>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1525909002-1b05e0c869d8?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="ac-img"/>
+                <h2 class="ac-title">Article 1</h2>
+                <p class="ac-desc">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse elit ligula, euismod at ullamcorper sed, dignissim sit amet massa. Mauris ac eros feugiat, dignissim lorem eget, accumsan dui. Curabitur molestie magna ac vestibulum vulputate. Mauris ultricies condimentum eros ut vestibulum. Duis non metus ut nisi hendrerit semper. In hac habitasse platea dictumst. Vestibulum in velit quis elit facilisis sodales. Vivamus finibus quis diam at imperdiet. Aliquam risus justo, egestas a hendrerit et, vulputate ut ex. Integer ultrices tellus nisi, a lacinia nulla aliquet ut. Cras tempor, est id placerat ultrices, tortor libero accumsan eros, in lacinia nisl felis sed erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc finibus quam vel justo sollicitudin, vitae efficitur enim vestibulum. Aliquam sollicitudin mi id neque volutpat accumsan. Morbi pellentesque volutpat pulvinar. Cras elementum metus ut leo aliquet mollis. 
+                </p>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1525909002-1b05e0c869d8?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="ac-img"/>
+                <h2 class="ac-title">Article 2</h2>
+                <p class="ac-desc">
+                    Curabitur eget dapibus justo. Phasellus euismod scelerisque ipsum facilisis venenatis. Praesent scelerisque convallis risus a finibus. Nunc id faucibus elit. Nullam pharetra risus tincidunt, consectetur tellus vitae, lacinia elit. Morbi vestibulum a massa eu sollicitudin. Aliquam lacinia nec ex in varius. In imperdiet aliquet blandit. Vivamus iaculis mauris vel vulputate sagittis. Cras in ligula imperdiet tellus elementum finibus nec at metus. 
+                </p>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1525909002-1b05e0c869d8?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="ac-img"/>
+                <h2 class="ac-title">Article 3</h2>
+                <p class="ac-desc">
+                    Maecenas feugiat semper pulvinar. Pellentesque est tortor, efficitur feugiat sodales vitae, ullamcorper at nibh. Aenean elementum ut purus ut auctor. Morbi magna quam, auctor viverra suscipit in, tristique et erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sagittis orci est, et consectetur ipsum pharetra in. Suspendisse vel sapien aliquam, fringilla lacus bibendum, luctus ex. Nullam id convallis enim. Phasellus pretium magna quis libero egestas, eu tempus libero hendrerit. Nunc sit amet nunc a metus ornare cursus. Nulla ex turpis, eleifend vitae mattis venenatis, mattis nec lorem. Nullam sed posuere justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc purus enim, eleifend id semper eu, feugiat eget eros. In ultrices a odio ut condimentum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+                </p>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1525909002-1b05e0c869d8?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="ac-img"/>
+                <h2 class="ac-title">Article 4</h2>
+                <p class="ac-desc">
+                    Maecenas feugiat semper pulvinar. Pellentesque est tortor, efficitur feugiat sodales vitae, ullamcorper at nibh. Aenean elementum ut purus ut auctor. Morbi magna quam, auctor viverra suscipit in, tristique et erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sagittis orci est, et consectetur ipsum pharetra in. Suspendisse vel sapien aliquam, fringilla lacus bibendum, luctus ex. Nullam id convallis enim. Phasellus pretium magna quis libero egestas, eu tempus libero hendrerit. Nunc sit amet nunc a metus ornare cursus. Nulla ex turpis, eleifend vitae mattis venenatis, mattis nec lorem. Nullam sed posuere justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc purus enim, eleifend id semper eu, feugiat eget eros. In ultrices a odio ut condimentum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+                </p>
+            </div>
+        </main>
+
+        <aside>
+            <h3>Tips & Tricks</h3>
+            <p>
+                Praesent bibendum aliquet nibh sodales pulvinar. Mauris dapibus metus gravida imperdiet lobortis. Aliquam sed ex ligula. Aliquam vel accumsan urna, facilisis sollicitudin libero. Morbi sollicitudin nibh quis mi bibendum ornare. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam quis interdum nisl. Donec commodo est in risus commodo tincidunt. Morbi eu lorem congue enim rutrum iaculis nec in sem. Ut ac consequat massa. Vivamus nec blandit tortor. 
+            </p>
+        </aside>
+
+        <footer>
+            <h3>Come back anytime!</h3>
+            <p>Copyright 2024 iZUMi</p>
+        </footer>
+    </body>
+</html>
