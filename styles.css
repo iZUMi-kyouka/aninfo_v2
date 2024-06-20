@@ -1857,10 +1857,10 @@ main {
     transform: translateY(-55%);
 }
 
-. {
+/* . {
     display: flex;
     flex-direction: column;
-}
+} */
 
 /* #endregion */
 
