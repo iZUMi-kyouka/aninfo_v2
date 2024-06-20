@@ -814,31 +814,296 @@ impl Default for ExplorePage {
 }
 
 pub fn binary_search<T: PartialOrd + Debug>(v: &[T], t: &T) -> Option<usize> {
+    // Immediately return if length of v is 0
     if v.len() == 0 {
         return None;
     }
-    log!(&format!("{:?}, finding {:?}", v, t));
+    
+    println!("Finding for {:?} in {:?}", t, v);
+    
+    // Immediately return if target is smaller than first element or larger
+    // than last element
+    if t < &v[0] || t > &v[v.len()-1] {
+        return None;
+    }
+    
     let mut left = 0usize;
     let mut right = v.len() - 1;
     let mut mid = (left + right) / 2;
-
-    while left < right {
-        if &v[mid] == t {
-            return Some(mid)
+    
+    // Immediately return if mid is target
+    if &v[mid] == t && mid > 0 {
+        while &v[mid] == t && mid > 0 {
+            mid -= 1;
+        }
+        if mid == 0 && &v[mid] == t {
+            return Some(mid);
+        } else {
+          return Some(mid+1);  
+        }
+    } else if &v[mid] == t {
+        return Some(mid);
+    }
+    
+    // While the window length is at least 2, continue comparing with mid
+    // and recalculating mid until found or window length is 1
+    while left <= right {
+        if &v[mid] == t && mid > 0 {
+            while &v[mid] == t && mid > 0 {
+                mid -= 1;
+            }
+            if mid == 0 && &v[mid] == t {
+                return Some(mid);
+            } else {
+              return Some(mid+1);  
+            }
+        } else if &v[mid] == t {
+            return Some(mid);
         } else if &v[mid] < t {
             left = mid + 1;
             mid = (left + right) / 2;
         } else if &v[mid] > t {
-            if mid < right && mid >= 1 {
+            if mid >= 1 {
                 right = mid - 1;
                 mid = (left + right) / 2;
+            } else {
+                return None;
             }
         }
     }
-
-    if left == right && &v[mid] == t {
-        return Some(mid)
-    }
+    
+    // If there is only one element in the current window, then compare with it
+    // if left == right && &v[mid] == t {
+    //     return Some(mid)
+    // }
 
     return None
+}
+
+// Helper function to compare Option<usize> for testing
+fn assert_option_usize_eq(result: Option<usize>, expected: Option<usize>) {
+    match (result, expected) {
+        (None, None) => (),
+        (Some(r), Some(e)) => assert_eq!(r, e),
+        _ => panic!("Expected {:?}, got {:?}", expected, result),
+    }
+}
+
+fn main() {
+    let x = [50000, 60000];
+    let target = 1;
+    let target_i = binary_search(&x, &target);
+    match target_i {
+        None => println!("{} not found in array 'x'.", &target),
+        Some(i) => println!("{} found in array 'x' at index {i}", &target)
+    }
+    println!("Hello, world!");
+}
+
+#[cfg(test)]
+mod tests1 {
+    use super::*;
+
+    #[test]
+    fn test_binary_search() {
+        // Test cases with an empty array
+        let array_empty: &[i32] = &[];
+        assert_option_usize_eq(binary_search(array_empty, &10), None);
+
+        // Test cases with single-element arrays
+        let array_single = &[5];
+        assert_option_usize_eq(binary_search(array_single, &5), Some(0));
+        assert_option_usize_eq(binary_search(array_single, &10), None);
+
+        // Test cases with multiple-element arrays
+        let array_multiple = &[2, 4, 6, 8, 10];
+        assert_option_usize_eq(binary_search(array_multiple, &4), Some(1));
+        assert_option_usize_eq(binary_search(array_multiple, &2), Some(0));
+        assert_option_usize_eq(binary_search(array_multiple, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_multiple, &5), None);
+        assert_option_usize_eq(binary_search(array_multiple, &1), None);
+        assert_option_usize_eq(binary_search(array_multiple, &11), None);
+
+        // Test cases with repeated elements
+        let array_repeated = &[1, 2, 2, 2, 3, 4, 5];
+        assert_option_usize_eq(binary_search(array_repeated, &2), Some(1));
+        assert_option_usize_eq(binary_search(array_repeated, &5), Some(6));
+        assert_option_usize_eq(binary_search(array_repeated, &0), None);
+        assert_option_usize_eq(binary_search(array_repeated, &6), None);
+
+        // Test cases with negative numbers
+        let array_negative = &[-10, -5, 0, 5, 10];
+        assert_option_usize_eq(binary_search(array_negative, &0), Some(2));
+        assert_option_usize_eq(binary_search(array_negative, &-10), Some(0));
+        assert_option_usize_eq(binary_search(array_negative, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_negative, &-6), None);
+        assert_option_usize_eq(binary_search(array_negative, &6), None);
+
+        // Additional tests for edge cases
+        let array_edge = &[1, 3, 5, 7, 9];
+        assert_option_usize_eq(binary_search(array_edge, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_edge, &9), Some(4));
+        assert_option_usize_eq(binary_search(array_edge, &4), None);
+        assert_option_usize_eq(binary_search(array_edge, &10), None);
+    }
+}
+
+#[cfg(test)]
+mod tests2 {
+    use super::*;
+
+    #[test]
+    fn test_binary_search() {
+        // Test cases with an empty array
+        let array_empty: &[i32] = &[];
+        assert_option_usize_eq(binary_search(array_empty, &10), None);
+
+        // Test cases with single-element arrays
+        let array_single = &[5];
+        assert_option_usize_eq(binary_search(array_single, &5), Some(0));
+        assert_option_usize_eq(binary_search(array_single, &10), None);
+
+        // Test cases with multiple-element arrays
+        let array_multiple = &[2, 4, 6, 8, 10];
+        assert_option_usize_eq(binary_search(array_multiple, &4), Some(1));
+        assert_option_usize_eq(binary_search(array_multiple, &2), Some(0));
+        assert_option_usize_eq(binary_search(array_multiple, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_multiple, &5), None);
+        assert_option_usize_eq(binary_search(array_multiple, &1), None);
+        assert_option_usize_eq(binary_search(array_multiple, &11), None);
+
+        // Test cases with repeated elements
+        let array_repeated = &[1, 2, 2, 2, 3, 4, 5];
+        assert_option_usize_eq(binary_search(array_repeated, &2), Some(1));
+        assert_option_usize_eq(binary_search(array_repeated, &5), Some(6));
+        assert_option_usize_eq(binary_search(array_repeated, &0), None);
+        assert_option_usize_eq(binary_search(array_repeated, &6), None);
+
+        // Test cases with negative numbers
+        let array_negative = &[-10, -5, 0, 5, 10];
+        assert_option_usize_eq(binary_search(array_negative, &0), Some(2));
+        assert_option_usize_eq(binary_search(array_negative, &-10), Some(0));
+        assert_option_usize_eq(binary_search(array_negative, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_negative, &-6), None);
+        assert_option_usize_eq(binary_search(array_negative, &6), None);
+
+        // Additional tests for edge cases
+        let array_edge = &[1, 3, 5, 7, 9];
+        assert_option_usize_eq(binary_search(array_edge, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_edge, &9), Some(4));
+        assert_option_usize_eq(binary_search(array_edge, &4), None);
+        assert_option_usize_eq(binary_search(array_edge, &10), None);
+
+        // More test cases to ensure first occurrence with duplicates
+        let array_duplicates = &[1, 2, 2, 2, 3, 4, 4, 5, 5, 5];
+        assert_option_usize_eq(binary_search(array_duplicates, &2), Some(1));
+        assert_option_usize_eq(binary_search(array_duplicates, &4), Some(5));
+        assert_option_usize_eq(binary_search(array_duplicates, &5), Some(7));
+        assert_option_usize_eq(binary_search(array_duplicates, &6), None);
+        assert_option_usize_eq(binary_search(array_duplicates, &0), None);
+
+        // Generating more tests with various patterns and sizes...
+
+        // Continue adding more diverse test cases as needed
+    }
+}
+
+#[cfg(test)]
+mod tests3 {
+    use super::*;
+
+    #[test]
+    fn test_binary_search() {
+        // Test cases with an empty array
+        let array_empty: &[i32] = &[];
+        assert_option_usize_eq(binary_search(array_empty, &10), None);
+
+        // Test cases with single-element arrays
+        let array_single = &[5];
+        assert_option_usize_eq(binary_search(array_single, &5), Some(0));
+        assert_option_usize_eq(binary_search(array_single, &10), None);
+
+        // Test cases with multiple-element arrays
+        let array_multiple = &[2, 4, 6, 8, 10];
+        assert_option_usize_eq(binary_search(array_multiple, &4), Some(1));
+        assert_option_usize_eq(binary_search(array_multiple, &2), Some(0));
+        assert_option_usize_eq(binary_search(array_multiple, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_multiple, &5), None);
+        assert_option_usize_eq(binary_search(array_multiple, &1), None);
+        assert_option_usize_eq(binary_search(array_multiple, &11), None);
+
+        // Test cases with repeated elements
+        let array_repeated = &[1, 2, 2, 2, 3, 4, 5];
+        assert_option_usize_eq(binary_search(array_repeated, &2), Some(1));
+        assert_option_usize_eq(binary_search(array_repeated, &5), Some(6));
+        assert_option_usize_eq(binary_search(array_repeated, &0), None);
+        assert_option_usize_eq(binary_search(array_repeated, &6), None);
+
+        // Test cases with negative numbers
+        let array_negative = &[-10, -5, 0, 5, 10];
+        assert_option_usize_eq(binary_search(array_negative, &0), Some(2));
+        assert_option_usize_eq(binary_search(array_negative, &-10), Some(0));
+        assert_option_usize_eq(binary_search(array_negative, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_negative, &-6), None);
+        assert_option_usize_eq(binary_search(array_negative, &6), None);
+
+        // Additional tests for edge cases
+        let array_edge = &[1, 3, 5, 7, 9];
+        assert_option_usize_eq(binary_search(array_edge, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_edge, &9), Some(4));
+        assert_option_usize_eq(binary_search(array_edge, &4), None);
+        assert_option_usize_eq(binary_search(array_edge, &10), None);
+
+        // More test cases with diverse patterns
+        let array_large = &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+        assert_option_usize_eq(binary_search(array_large, &15), Some(14));
+        assert_option_usize_eq(binary_search(array_large, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_large, &20), Some(19));
+        assert_option_usize_eq(binary_search(array_large, &0), None);
+        assert_option_usize_eq(binary_search(array_large, &21), None);
+
+        let array_odd_length = &[1, 3, 5, 7, 9, 11];
+        assert_option_usize_eq(binary_search(array_odd_length, &5), Some(2));
+        assert_option_usize_eq(binary_search(array_odd_length, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_odd_length, &11), Some(5));
+        assert_option_usize_eq(binary_search(array_odd_length, &6), None);
+        assert_option_usize_eq(binary_search(array_odd_length, &0), None);
+
+        let array_alternating = &[2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+        assert_option_usize_eq(binary_search(array_alternating, &6), Some(2));
+        assert_option_usize_eq(binary_search(array_alternating, &10), Some(4));
+        assert_option_usize_eq(binary_search(array_alternating, &20), Some(9));
+        assert_option_usize_eq(binary_search(array_alternating, &1), None);
+        assert_option_usize_eq(binary_search(array_alternating, &21), None);
+
+        // Additional edge cases
+        let array_large_negative = &[-100, -50, -25, 0, 25, 50, 75, 100];
+        assert_option_usize_eq(binary_search(array_large_negative, &0), Some(3));
+        assert_option_usize_eq(binary_search(array_large_negative, &-100), Some(0));
+        assert_option_usize_eq(binary_search(array_large_negative, &100), Some(7));
+        assert_option_usize_eq(binary_search(array_large_negative, &75), Some(6));
+        assert_option_usize_eq(binary_search(array_large_negative, &101), None);
+
+        let array_all_same = &[5; 10];
+        assert_option_usize_eq(binary_search(array_all_same, &5), Some(0));
+        assert_option_usize_eq(binary_search(array_all_same, &6), None);
+
+        let array_two_elements = &[3, 7];
+        assert_option_usize_eq(binary_search(array_two_elements, &3), Some(0));
+        assert_option_usize_eq(binary_search(array_two_elements, &7), Some(1));
+        assert_option_usize_eq(binary_search(array_two_elements, &5), None);
+
+        let array_single_negative = &[-3];
+        assert_option_usize_eq(binary_search(array_single_negative, &-3), Some(0));
+        assert_option_usize_eq(binary_search(array_single_negative, &0), None);
+
+        let array_large_odd = &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        assert_option_usize_eq(binary_search(array_large_odd, &10), Some(9));
+        assert_option_usize_eq(binary_search(array_large_odd, &1), Some(0));
+        assert_option_usize_eq(binary_search(array_large_odd, &19), Some(18));
+        assert_option_usize_eq(binary_search(array_large_odd, &0), None);
+        assert_option_usize_eq(binary_search(array_large_odd, &20), None);
+
+        // Continue adding more diverse test cases as needed
+    }
 }

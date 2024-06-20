@@ -4,8 +4,8 @@ mod stores;
 mod utils;
 
 pub mod prelude {
-    // pub const BASE_URL: &'static str = "http://localhost:8000";
-    pub const BASE_URL: &'static str = "https://aninfo-server.shuttleapp.rs";
+    pub const BASE_URL: &'static str = "http://localhost:8000";
+    // pub const BASE_URL: &'static str = "https://aninfo-server.shuttleapp.rs";
     pub const JIKAN_URL: &'static str = "https://api.jikan.moe/v4/anime";
     pub use chrono::prelude::*;
     pub use std::hash::{DefaultHasher, Hash, Hasher};
