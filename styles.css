@@ -1,11 +1,11 @@
 /* #region: Global Variables */
 
 :root {
-    --base-bg-dark: hsl(212, 100%, 6%);
-    --base-obj-dark: hsl(212, 65%, 11%);
-    --base-obj-dark-lighter: hsl(212, 55%, 16%);
-    --base-obj-dark-ll: hsl(212, 50%, 22%);
-    --base-obj-dark-lll: hsl(212, 45%, 25%);
+    --base-bg-dark: hsl(212, 100%, 3%);
+    --base-obj-dark: hsl(212, 65%, 6%);
+    --base-obj-dark-lighter: hsl(212, 55%, 10%);
+    --base-obj-dark-ll: hsl(212, 50%, 14%);
+    --base-obj-dark-lll: hsl(212, 45%, 18%);
     --base-obj-light-darker: #ebebeb;
     --base-obj-light-dd: #cfcfcf;
     --base-obj-light-ddd: #bfbfbf;
@@ -1535,7 +1535,7 @@ dialog {
 }
 
 @media (min-width: 1000px) {
-    .recommendation-wrapper:hover {
+    .recommendation-wrapper[overflown]:hover {
         align-self: center;
         max-width: 100%;
         /* transition: max-width 0.45s ease-out; */
@@ -1543,7 +1543,7 @@ dialog {
 }
 
 @media (min-width: 1300px) {
-    .recommendation-wrapper:hover {
+    .recommendation-wrapper[overflown]:hover {
         align-self: center;
         max-width: calc(100vw - 100px);
         /* transition: max-width 0.55s ease-out; */

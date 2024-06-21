@@ -63,7 +63,8 @@ pub fn anime_card(props: &AnimeCardProp) -> Html {
                         let nav = nav.clone();
                         html!(<span class={format!("{} cursor-pointer hover-bold", theme)}><a onclick={
                             let genre_name = genre_obj.name.clone();
-                            move |_| {
+                            move |e: MouseEvent| {
+                                e.stop_propagation();
                                 nav.push(&Route::AnimeResultStd {
                                     content_title: format!("Top {} Anime", genre_name),
                                     page: 1,

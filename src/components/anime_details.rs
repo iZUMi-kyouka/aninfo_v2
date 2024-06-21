@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use gloo::dialogs::alert;
 use serde_json::json;
 use wasm_bindgen::closure::Closure;
@@ -133,6 +135,31 @@ pub fn content(props: &Props) -> HtmlResult {
     let theme = handle_theme(&cx);
     let mal_id = props.mal_id;
     let nav = use_navigator().unwrap();
+
+    use_effect(|| {
+        wasm_bindgen_futures::spawn_local(async move {
+            let mut count = 0;
+            let mut ani_r_wrapper = web_sys::window().unwrap().document().unwrap().get_element_by_id("ani-rec-card-wrapper");
+            while let None = ani_r_wrapper {
+                if count == 20 {
+                    return ();
+                }
+                gloo::timers::future::sleep(Duration::from_millis(10));
+                ani_r_wrapper = web_sys::window().unwrap().document().unwrap().get_element_by_id("ani-rec-card-wrapper");
+                count += 1;
+                log!(count);
+            }
+            
+            let rec_wrapper = web_sys::window().unwrap().document().unwrap().get_element_by_id("recommendation-wrapper").unwrap();
+            let ani_r_wrapper = ani_r_wrapper.unwrap();
+            if ani_r_wrapper.client_width() < ani_r_wrapper.scroll_width() {
+                // Element overflows, apply widening on hover
+                rec_wrapper.set_attribute("overflown", "");
+            } else {
+                rec_wrapper.remove_attribute("overflown");
+            }
+        });
+    });
 
     use_effect_once(|| {
         apply_horizontal_scroll(&web_sys::window().expect("Window should be present."));
