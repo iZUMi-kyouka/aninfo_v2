@@ -246,6 +246,7 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                             let theme_cloned = theme.clone();
                             let filters = filters.clone();
                             let get_torrent_full = get_torrent_full.clone();
+                            let query = client_query.clone();
 
 
                             let open_dwld = Callback::from(move |_: MouseEvent| {
@@ -258,6 +259,7 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                 let ttl_def = ttl_def.clone();
                                 let ttl_en = ttl_en.clone();
                                 let filters = filters.clone();
+                                query.set("".to_string());
 
                                 {
                                     if let None = (*torrent_data_state)[(n-1) as usize] {
@@ -285,6 +287,9 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                     elem.set_attribute("class", &format!("eps-dwld {}", theme_cloned.clone())).unwrap();
                                 } else {
                                     dialog.show();
+                                    let query_input = web_sys::window().unwrap().document().unwrap().get_element_by_id(&format!("client-torrent-custom-query-{}", n)).unwrap();
+                                    let query_input = query_input.dyn_into::<HtmlInputElement>().unwrap();
+                                    query.set(query_input.value());
                                     elem.set_attribute("class", &format!("eps-dwld-active {}", theme_cloned)).unwrap();
                                 }
                             });
@@ -451,6 +456,14 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                 let get_torrent_full = get_torrent_full.clone();
                                 let theme = theme.clone();
                                 let btn = web_sys::window().unwrap().document().unwrap().get_element_by_id(&format!("{}-btn-{}", filter_type.as_str(), n)).unwrap();
+
+                                    
+                                // Reset data state for ALL episodes
+                                {
+                                    let torrent_data_state = torrent_data_state.clone();
+                                    let v = (*torrent_data_state).clone().iter_mut().map(|_| None).collect::<Vec<Option<Vec<Torrent>>>>();
+                                    torrent_data_state.set(v);
+                                }
                                 
                                 // Set class to keep track of button state
                                 match (btn.get_attribute("class").unwrap().contains("active"), *get_torrent_full) {
@@ -463,14 +476,6 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                         alert("'Enhanced Result' MUST be turned on to use these filters.");
                                         return ();
                                     }
-                                }
-    
-                                // Reset data state for the chosen episode
-                                {
-                                    let torrent_data_state = torrent_data_state.clone();
-                                    let mut v = (*torrent_data_state).clone();
-                                    v[n-1] = None;
-                                    torrent_data_state.set(v);
                                 }
                                 
                                 // Get the selected filters
@@ -500,7 +505,7 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                     let get_torrent_full = get_torrent_full.clone();
                                     let torrents = get_torrents(&*ttl_cheap_en, &*ttl_cheap_def, n as u16, &filter_to_req, *get_torrent_full).await;
                                     log!(format!("{:#?}", &torrents));
-                                    let mut cur_t = (*torrent_data_state).clone();
+                                    let mut cur_t = (*torrent_data_state).clone().iter_mut().map(|_| None).collect::<Vec<Option<Vec<Torrent>>>>();
                                     cur_t[n-1] = Some(torrents);
                                     torrent_data_state.set(cur_t);
                                 });
@@ -753,6 +758,14 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
 
                         <div class="eps-filter-wrapper">
                             <h3 class="eps-filter-title">{"Filters"}</h3>
+                            <button id={format!("enhanced-result-btn-{}", n)} class={format!("eps-filter{} hover-highlight {}", {
+                                if *get_torrent_full {
+                                    "-active"
+                                } else {
+                                    ""
+                                }
+                            },theme.clone())} onclick={enhanced_result}>{"Enhanced Result"}
+                            </button>
                             {
                                     FILTER_TYPES
                                         .iter()
@@ -793,18 +806,10 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                             //         ""
                             //     }
                             // },theme.clone())} onclick={hevc_filter}>{"HEVC"}</button>
-
-                            <button id={format!("enhanced-result-btn-{}", n)} class={format!("eps-filter{} hover-highlight {}", {
-                                if *get_torrent_full {
-                                    "-active"
-                                } else {
-                                    ""
-                                }
-                            },theme.clone())} onclick={enhanced_result}>{"Enhanced Result"}</button>
                         </div>
 
                         <div class="client-query">
-                           <span>{"Custom Keyword"}</span><input type="text" id="client-torrent-custom-query" oninput={&update_client_query}/>
+                           <span>{"Custom Keyword"}</span><input type="text" id={format!("client-torrent-custom-query-{}", n)} class="client-torrent-custom-query" oninput={&update_client_query}/>
                         </div>
 
                         <section class="torrent-cards-wrapper">
@@ -837,10 +842,10 @@ pub fn EpisodeCards(props: &EpisodeCardProps) -> Html {
                                                                 </section>
                                                             </article>
                                                             <section class="torrent-download-buttons">
-                                                                <div class="torrent-link-magnet"><a class="a-btn ripple" target="_blank" href={(torrent.link_magnet).clone()}>
+                                                                <div class="torrent-link-magnet"><a class="a-btn ripple" href={(torrent.link_magnet).clone()}>
                                                                     <img class={format!("icon-{}", theme.clone())}src="./static/torrent-magnet.svg" width="32px" height="32px"/>
                                                                 </a></div>
-                                                                <div class="torrent-link-torrent"><a class="a-btn ripple" href={(torrent.link_torrent).clone()} target="_blank">
+                                                                <div class="torrent-link-torrent"><a class="a-btn ripple" href={(torrent.link_torrent).clone()}>
                                                                     <img class={format!("icon-{}", theme.clone())}src="./static/torrent-download.svg" width="32px" height="32px"/>
                                                                 </a></div>
                                                             </section>

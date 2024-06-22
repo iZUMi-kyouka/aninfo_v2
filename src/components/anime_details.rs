@@ -392,11 +392,11 @@ pub fn content(props: &Props) -> HtmlResult {
                                     if let Some(_) = (*cx).fav_anime_id {
                                         if let Some(_) = binary_search(((*cx).fav_anime_id.as_ref().unwrap()), &(props.mal_id as i32)) {
                                             html!{
-                                                <a class="a-btn ripple" onclick={remove_from_favourite}><img id="fav-icon" src="./static/heart_filled.svg" width="28px" height="28px" class="icon-dark"/></a>
+                                                <a class="a-btn ripple" onclick={remove_from_favourite.clone()}><img id="fav-icon" src="./static/heart_filled.svg" width="28px" height="28px" class="icon-dark"/></a>
                                             }
                                         } else {
                                             html!{
-                                                <a class="a-btn ripple" onclick={add_to_favourite}><img id="fav-icon" src="./static/heart.svg" width="28px" height="28px" class="icon-dark"/></a>
+                                                <a class="a-btn ripple" onclick={add_to_favourite.clone()}><img id="fav-icon" src="./static/heart.svg" width="28px" height="28px" class="icon-dark"/></a>
                                             }
                                         }
                                     } else {
@@ -431,6 +431,27 @@ pub fn content(props: &Props) -> HtmlResult {
                                             html!(<span class={format!("{}", theme)}>{genre_obj.name.clone()}</span>)
                                         }).collect::<Html>()}
                                     </article>
+                                    <div class="ad-user-options">
+                                    {
+                                        if let Some(_) = (*cx).fav_anime_id {
+                                            if let Some(_) = binary_search(((*cx).fav_anime_id.as_ref().unwrap()), &(props.mal_id as i32)) {
+                                                html!{
+                                                    <a class="a-btn ripple" onclick={remove_from_favourite}><img id="fav-icon" src="./static/heart_filled.svg" width="28px" height="28px" class="icon-dark"/></a>
+                                                }
+                                            } else {
+                                                html!{
+                                                    <a class="a-btn ripple" onclick={add_to_favourite}><img id="fav-icon" src="./static/heart.svg" width="28px" height="28px" class="icon-dark"/></a>
+                                                }
+                                            }
+                                        } else {
+                                            html! {
+                                                <a onclick={|_| {
+                                                    alert("You need to be logged in to add an anime to Favourites.");
+                                                }}><img id="fav-icon" src="./static/heart.svg" width="28px" height="28px" class="icon-dark cursor-disabled"/></a>
+                                            }
+                                        }
+                                    }
+                                    </div>
                                 </div>
                             </div>
 

@@ -6,6 +6,7 @@
     --base-obj-dark-lighter: hsl(212, 55%, 10%);
     --base-obj-dark-ll: hsl(212, 50%, 14%);
     --base-obj-dark-lll: hsl(212, 45%, 18%);
+    --base-obj-dark-llll: hsl(212, 43%, 22%);
     --base-obj-light-darker: #ebebeb;
     --base-obj-light-dd: #cfcfcf;
     --base-obj-light-ddd: #bfbfbf;
@@ -796,6 +797,9 @@ background-color: #ebebeb;
     .dark[class~="hover-highlight"]:hover {
         background-color: var(--base-obj-dark-lll);
         transition: background-color 0.2s ease, font-weight 0.2s ease;
+        .anime-card-genre-tag {
+            background-color: var(--base-obj-dark-llll);
+        }
     }
     
     .light[class~="hover-highlight"]:hover {
@@ -966,7 +970,11 @@ background-color: #ebebeb;
     flex-direction: row;
     gap: 0.75rem;
     align-items: center;
-    padding: 5px 15px;
+    padding: 5px 15px 15px 15px;
+}
+
+.client-query > span {
+    min-width: 15ch;
 }
 
 .eps-filter-btn[class~="cursor-disabled"] {
@@ -1034,10 +1042,10 @@ background-color: #ebebeb;
     gap: 5px;
     padding: 0 15px;
     overflow: auto;
-    min-height: 4rem;
+    min-height: 3rem;
 }
 
-#client-torrent-custom-query {
+.client-torrent-custom-query {
     width: 100%;
 }
 
@@ -1089,7 +1097,6 @@ background-color: #ebebeb;
     border: 2px solid #ddd;
     padding: 10px 15px;
     display: flex;
-    gap: 10px;
     flex-direction: column;
     box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.7);
     transition: 

@@ -61,7 +61,7 @@ pub fn anime_card(props: &AnimeCardProp) -> Html {
                     // <span><p>Thriller</p></span>
                     {ao.genres.into_iter().map(|genre_obj| {
                         let nav = nav.clone();
-                        html!(<span class={format!("{} cursor-pointer hover-bold", theme)}><a onclick={
+                        html!(<span class={format!("{} cursor-pointer u_onhover anime-card-genre-tag", theme)}><a onclick={
                             let genre_name = genre_obj.name.clone();
                             move |e: MouseEvent| {
                                 e.stop_propagation();

@@ -131,6 +131,10 @@
     .page-btn-wrapper {
         max-width: 90vw;
     }
+
+    .client-query > span {
+        min-width: unset;
+    }
     
 }
 
